@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Variables</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #1a2332;
+      --muted: #6b7785;
+      --line: #e3e8ee;
+      --type: #d62828;
+      --name: #1d4ed8;
+      --comment: #8a939e;
+      --ok: #0f7b4c;
+      --ok-bg: #e8f7ef;
+      --bad: #b42318;
+      --bad-bg: #fef3f2;
+      --accent: #0e7490;
+      --soft: #f3fafc;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "DM Sans", system-ui, sans-serif;
+      color: var(--ink);
+      background: #f7f8fa;
+    }
+
+    .shell {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 28px 20px 40px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .tabs button {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 7px 12px;
+      font: 600 0.85rem "DM Sans", sans-serif;
+      cursor: pointer;
+    }
+
+    .tabs button.active {
+      background: var(--ink);
+      border-color: var(--ink);
+      color: #fff;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 14px;
+      min-height: 480px;
+    }
+
+    @media (max-width: 860px) {
+      .layout { grid-template-columns: 1fr; }
+    }
+
+    .panel {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 24px;
+      min-height: 440px;
+    }
+
+    .scenario {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.45;
+    }
+
+    pre.code {
+      margin: 0;
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      font-size: clamp(0.95rem, 1.6vw, 1.1rem);
+      line-height: 1.9;
+      white-space: pre-wrap;
+    }
+
+    .t { color: var(--type); font-weight: 600; }
+    .n { color: var(--name); font-weight: 600; }
+    .c { color: var(--comment); }
+    .k { color: #7c3aed; font-weight: 600; }
+
+    .quiz {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      gap: 16px;
+    }
+
+    .q-text {
+      margin: 0;
+      font-size: 1.25rem;
+      line-height: 1.35;
+      letter-spacing: -0.02em;
+    }
+
+    .options {
+      display: grid;
+      gap: 10px;
+    }
+
+    .option {
+      text-align: left;
+      border: 1.5px solid var(--line);
+      background: #fbfcfd;
+      border-radius: 12px;
+      padding: 13px 14px;
+      font: 500 1rem "DM Sans", sans-serif;
+      color: var(--ink);
+      cursor: pointer;
+    }
+
+    .option:hover:not(:disabled) {
+      border-color: #9bb8c4;
+      background: var(--soft);
+    }
+
+    .option.correct {
+      border-color: #3fa575;
+      background: var(--ok-bg);
+      color: var(--ok);
+    }
+
+    .option.wrong {
+      border-color: #f0a8a0;
+      background: var(--bad-bg);
+      color: var(--bad);
+    }
+
+    .option:disabled { cursor: default; }
+
+    .feedback {
+      min-height: 1.4em;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      color: var(--muted);
+    }
+
+    .feedback.ok { color: var(--ok); }
+    .feedback.bad { color: var(--bad); }
+
+    .actions {
+      margin-top: auto;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding-top: 8px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 10px;
+      padding: 11px 16px;
+      font: 700 0.95rem "DM Sans", sans-serif;
+      cursor: pointer;
+      background: #eef2f6;
+      color: var(--ink);
+    }
+
+    .btn.primary {
+      background: var(--accent);
+      color: #fff;
+      margin-left: auto;
+    }
+
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="tabs" id="tabs"></nav>
+    <div class="layout">
+      <section class="panel">
+        <p class="scenario" id="scenario"></p>
+        <pre class="code" id="code"></pre>
+      </section>
+      <section class="panel">
+        <div class="quiz">
+          <p class="q-text" id="question"></p>
+          <div class="options" id="options"></div>
+          <div class="feedback" id="feedback"></div>
+          <div class="actions">
+            <button class="btn" id="prev" type="button">Back</button>
+            <button class="btn primary" id="next" type="button" disabled>Next</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const examples = [
+      {
+        title: "Theme park",
+        scenario: "A theme park only lets people on a ride if they are tall enough and old enough.",
+        code: [
+          '<span class="t">int</span>     <span class="n">age</span> = 13;',
+          '<span class="t">float</span>   <span class="n">height</span> = 156.4;',
+          '<span class="t">bool</span>    <span class="n">ridepass</span> = false;',
+          '<span class="c">// allow ride if tall enough AND old enough</span>',
+          '<span class="k">if</span> (<span class="n">height</span> &gt;= 140 <span class="k">and</span> <span class="n">age</span> &gt;= 13)',
+          '{',
+          '    <span class="n">ridepass</span> = true;',
+          '}'
+        ],
+        questions: [
+          {
+            text: "The red text (int, float, bool) is…",
+            options: [
+              { label: "The type of data stored", correct: true },
+              { label: "The name of the variable", correct: false },
+              { label: "A comment for humans", correct: false }
+            ],
+            explain: "Types tell the computer what kind of value to expect."
+          },
+          {
+            text: "The blue text (age, height, ridepass) is…",
+            options: [
+              { label: "A maths operator", correct: false },
+              { label: "The variable’s name", correct: true },
+              { label: "The final answer", correct: false }
+            ],
+            explain: "Names are labels so we can store and reuse values."
+          },
+          {
+            text: "With age = 13 and height = 156.4, what is ridepass after the if?",
+            options: [
+              { label: "false", correct: false },
+              { label: "true", correct: true },
+              { label: "156.4", correct: false }
+            ],
+            explain: "Both checks pass, so ridepass becomes true."
+          }
+        ]
+      },
+      {
+        title: "Drinking age",
+        scenario: "In the USA you must be 21 or older to buy alcohol. Mr Chan is 24.",
+        code: [
+          '<span class="t">int</span>     <span class="n">age</span> = 24;',
+          '<span class="t">int</span>     <span class="n">limit</span> = 21;',
+          '<span class="t">bool</span>    <span class="n">allowed</span> = false;',
+          '<span class="c">// Mr Chan wants to buy a drink in the US</span>',
+          '<span class="k">if</span> (<span class="n">age</span> &gt;= <span class="n">limit</span>)',
+          '{',
+          '    <span class="n">allowed</span> = true;',
+          '}'
+        ],
+        questions: [
+          {
+            text: "What type is age?",
+            options: [
+              { label: "float", correct: false },
+              { label: "int", correct: true },
+              { label: "bool", correct: false }
+            ],
+            explain: "Whole years are stored as an int."
+          },
+          {
+            text: "Is Mr Chan allowed to drink in the US?",
+            options: [
+              { label: "No", correct: false },
+              { label: "Yes — 24 ≥ 21", correct: true },
+              { label: "The code never checks", correct: false }
+            ],
+            explain: "allowed is set to true."
+          },
+          {
+            text: "What does = do in  allowed = true ?",
+            options: [
+              { label: "Checks if allowed equals true", correct: false },
+              { label: "Stores true inside allowed", correct: true },
+              { label: "Deletes the variable", correct: false }
+            ],
+            explain: "= means assignment — put this value into the variable."
+          }
+        ]
+      },
+      {
+        title: "Voting",
+        scenario: "You can vote from age 18. Sam is 16.",
+        code: [
+          '<span class="t">int</span>     <span class="n">age</span> = 16;',
+          '<span class="t">bool</span>    <span class="n">canVote</span> = false;',
+          '<span class="c">// voting age is 18</span>',
+          '<span class="k">if</span> (<span class="n">age</span> &gt;= 18)',
+          '{',
+          '    <span class="n">canVote</span> = true;',
+          '}'
+        ],
+        questions: [
+          {
+            text: "After this runs, what is canVote?",
+            options: [
+              { label: "true", correct: false },
+              { label: "false", correct: true },
+              { label: "16", correct: false }
+            ],
+            explain: "16 is not ≥ 18, so canVote stays false."
+          },
+          {
+            text: "Which line creates a true/false variable?",
+            options: [
+              { label: "int age = 16;", correct: false },
+              { label: "bool canVote = false;", correct: true },
+              { label: "if (age >= 18)", correct: false }
+            ],
+            explain: "bool means true or false."
+          },
+          {
+            text: "If age becomes 18, what happens?",
+            options: [
+              { label: "canVote becomes true", correct: true },
+              { label: "Nothing changes", correct: false },
+              { label: "age turns into a bool", correct: false }
+            ],
+            explain: "Changing a variable can change what the if decides."
+          }
+        ]
+      },
+      {
+        title: "Cinema",
+        scenario: "A film is rated 15. Maya is 14. Can she watch it alone?",
+        code: [
+          '<span class="t">int</span>     <span class="n">age</span> = 14;',
+          '<span class="t">int</span>     <span class="n">rating</span> = 15;',
+          '<span class="t">bool</span>    <span class="n">ticket</span> = false;',
+          '<span class="c">// alone only if old enough for the rating</span>',
+          '<span class="k">if</span> (<span class="n">age</span> &gt;= <span class="n">rating</span>)',
+          '{',
+          '    <span class="n">ticket</span> = true;',
+          '}'
+        ],
+        questions: [
+          {
+            text: "How many int variables are created?",
+            options: [
+              { label: "1", correct: false },
+              { label: "2", correct: true },
+              { label: "3", correct: false }
+            ],
+            explain: "age and rating are ints. ticket is a bool."
+          },
+          {
+            text: "Will Maya get a ticket?",
+            options: [
+              { label: "Yes", correct: false },
+              { label: "No — 14 &lt; 15", correct: true },
+              { label: "Yes — ticket starts true", correct: false }
+            ],
+            explain: "The if does not run, so ticket stays false."
+          },
+          {
+            text: "Best type for ticket?",
+            options: [
+              { label: "int", correct: false },
+              { label: "float", correct: false },
+              { label: "bool", correct: true }
+            ],
+            explain: "Allowed or not is true/false."
+          }
+        ]
+      },
+      {
+        title: "Battery",
+        scenario: "Alex’s phone warns if the battery is low.",
+        code: [
+          '<span class="t">float</span>   <span class="n">battery</span> = 12.5;',
+          '<span class="t">bool</span>    <span class="n">lowPower</span> = false;',
+          '<span class="c">// warn when battery is under 20%</span>',
+          '<span class="k">if</span> (<span class="n">battery</span> &lt; 20)',
+          '{',
+          '    <span class="n">lowPower</span> = true;',
+          '}'
+        ],
+        questions: [
+          {
+            text: "Why is battery a float?",
+            options: [
+              { label: "It can be a decimal like 12.5", correct: true },
+              { label: "Floats are always true", correct: false },
+              { label: "Phones only use floats", correct: false }
+            ],
+            explain: "Decimals need float."
+          },
+          {
+            text: "After the if, what is lowPower?",
+            options: [
+              { label: "false", correct: false },
+              { label: "true", correct: true },
+              { label: "12.5", correct: false }
+            ],
+            explain: "12.5 &lt; 20, so lowPower becomes true."
+          },
+          {
+            text: "If battery changes to 45.0?",
+            options: [
+              { label: "lowPower stays true forever", correct: false },
+              { label: "lowPower should be false", correct: true },
+              { label: "battery becomes a bool", correct: false }
+            ],
+            explain: "New values can lead to different decisions."
+          }
+        ]
+      },
+      {
+        title: "High score",
+        scenario: "Unlock a badge if your score beats the high score.",
+        code: [
+          '<span class="t">int</span>     <span class="n">score</span> = 820;',
+          '<span class="t">int</span>     <span class="n">highScore</span> = 750;',
+          '<span class="t">bool</span>    <span class="n">newRecord</span> = false;',
+          '<span class="c">// unlock badge for a new record</span>',
+          '<span class="k">if</span> (<span class="n">score</span> &gt; <span class="n">highScore</span>)',
+          '{',
+          '    <span class="n">newRecord</span> = true;',
+          '    <span class="n">highScore</span> = <span class="n">score</span>;',
+          '}'
+        ],
+        questions: [
+          {
+            text: "What does highScore = score do?",
+            options: [
+              { label: "Compares the two numbers", correct: false },
+              { label: "Copies score into highScore", correct: true },
+              { label: "Deletes the old high score", correct: false }
+            ],
+            explain: "Assignment updates highScore to 820."
+          },
+          {
+            text: "Is newRecord true at the end?",
+            options: [
+              { label: "Yes — 820 &gt; 750", correct: true },
+              { label: "No", correct: false },
+              { label: "Bools cannot change", correct: false }
+            ],
+            explain: "The if condition is true."
+          },
+          {
+            text: "Variables…",
+            options: [
+              { label: "can change while the program runs", correct: true },
+              { label: "can never change", correct: false },
+              { label: "only ints can change", correct: false }
+            ],
+            explain: "That’s why they’re called variables."
+          }
+        ]
+      }
+    ];
+
+    let ei = 0;
+    let qi = 0;
+    let locked = false;
+    const memory = new Map();
+
+    const tabs = document.getElementById("tabs");
+    const scenario = document.getElementById("scenario");
+    const code = document.getElementById("code");
+    const question = document.getElementById("question");
+    const options = document.getElementById("options");
+    const feedback = document.getElementById("feedback");
+    const prev = document.getElementById("prev");
+    const next = document.getElementById("next");
+
+    function key() { return `${ei}:${qi}`; }
+
+    function renderTabs() {
+      tabs.innerHTML = "";
+      examples.forEach((ex, i) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.textContent = ex.title;
+        if (i === ei) b.classList.add("active");
+        b.onclick = () => {
+          ei = i;
+          qi = 0;
+          render();
+        };
+        tabs.appendChild(b);
+      });
+    }
+
+    function render() {
+      const ex = examples[ei];
+      if (qi >= ex.questions.length) {
+        if (ei < examples.length - 1) {
+          ei += 1;
+          qi = 0;
+        } else {
+          qi = ex.questions.length - 1;
+        }
+      }
+
+      renderTabs();
+      scenario.textContent = ex.scenario;
+      code.innerHTML = ex.code.join("\n");
+
+      const q = ex.questions[qi];
+      const saved = memory.get(key());
+      locked = saved !== undefined;
+
+      question.textContent = q.text;
+      feedback.textContent = "";
+      feedback.className = "feedback";
+      options.innerHTML = "";
+
+      q.options.forEach((opt, i) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "option";
+        b.textContent = opt.label;
+
+        if (locked) {
+          b.disabled = true;
+          if (opt.correct) b.classList.add("correct");
+          if (saved.choice === i && !opt.correct) b.classList.add("wrong");
+        } else {
+          b.onclick = () => choose(i);
+        }
+        options.appendChild(b);
+      });
+
+      if (locked) {
+        feedback.textContent = q.explain;
+        feedback.classList.add(saved.ok ? "ok" : "bad");
+        next.disabled = false;
+      } else {
+        next.disabled = true;
+      }
+
+      prev.disabled = ei === 0 && qi === 0;
+      next.textContent = (qi === ex.questions.length - 1 && ei === examples.length - 1) ? "Done" : "Next";
+    }
+
+    function choose(i) {
+      if (locked) return;
+      const q = examples[ei].questions[qi];
+      const ok = q.options[i].correct;
+      locked = true;
+      memory.set(key(), { choice: i, ok });
+
+      [...options.children].forEach((b, idx) => {
+        b.disabled = true;
+        if (q.options[idx].correct) b.classList.add("correct");
+        if (idx === i && !q.options[idx].correct) b.classList.add("wrong");
+      });
+
+      feedback.textContent = q.explain;
+      feedback.classList.add(ok ? "ok" : "bad");
+      next.disabled = false;
+    }
+
+    next.onclick = () => {
+      if (!locked) return;
+      const ex = examples[ei];
+      if (qi < ex.questions.length - 1) {
+        qi += 1;
+      } else if (ei < examples.length - 1) {
+        ei += 1;
+        qi = 0;
+      }
+      render();
+    };
+
+    prev.onclick = () => {
+      if (qi > 0) qi -= 1;
+      else if (ei > 0) {
+        ei -= 1;
+        qi = examples[ei].questions.length - 1;
+      }
+      render();
+    };
+
+    render();
+  </script>
+</body>
+</html>
