@@ -100,6 +100,7 @@
     .n { color: var(--name); font-weight: 600; }
     .c { color: var(--comment); }
     .k { color: #7c3aed; font-weight: 600; }
+    .s { color: #b45309; }
 
     .quiz {
       display: flex;
@@ -258,44 +259,39 @@
         ]
       },
       {
-        title: "Voting",
-        scenario: "You can vote from age 18. Sam is 16.",
+        title: "Grade",
+        scenario: "Sam’s test grade is stored as a single letter.",
         code: [
-          '<span class="t">int</span>     <span class="n">age</span> = 16;',
-          '<span class="t">bool</span>    <span class="n">canVote</span> = false;',
-          '<span class="c">// voting age is 18</span>',
-          '<span class="k">if</span> (<span class="n">age</span> &gt;= 18)',
-          '{',
-          '    <span class="n">canVote</span> = true;',
-          '}'
+          '<span class="t">char</span>    <span class="n">grade</span> = <span class="s">\'B\'</span>;',
+          '<span class="t">int</span>     <span class="n">score</span> = 72;'
         ],
         questions: [
           {
-            text: "What type is age?",
+            text: "What type is grade?",
             options: [
-              { label: "float", correct: false },
-              { label: "int", correct: true },
+              { label: "int", correct: false },
+              { label: "char", correct: true },
               { label: "bool", correct: false }
             ],
-            explain: "Whole years are stored as an int."
+            explain: "char stores one character, like a letter."
           },
           {
-            text: "After this runs, what is canVote?",
+            text: "What is stored in grade?",
             options: [
-              { label: "true", correct: false },
-              { label: "false", correct: true },
-              { label: "16", correct: false }
+              { label: "The word \"grade\"", correct: false },
+              { label: "The letter B", correct: true },
+              { label: "The number 72", correct: false }
             ],
-            explain: "16 is not ≥ 18, so canVote stays false."
+            explain: "Single quotes hold one character: 'B'."
           },
           {
-            text: "Which line creates a true/false variable?",
+            text: "Why not store grade as an int?",
             options: [
-              { label: "int age = 16;", correct: false },
-              { label: "bool canVote = false;", correct: true },
-              { label: "if (age >= 18)", correct: false }
+              { label: "Letters need char, not a whole number", correct: true },
+              { label: "int cannot store 72", correct: false },
+              { label: "char is only for true/false", correct: false }
             ],
-            explain: "bool means true or false."
+            explain: "Use char for a single letter or symbol."
           }
         ]
       },
@@ -343,45 +339,44 @@
         ]
       },
       {
-        title: "Cinema",
-        scenario: "A film is rated 15. Maya is 14. Can she watch it alone?",
+        title: "Key press",
+        scenario: "A game waits for the player to press Y to start.",
         code: [
-          '<span class="t">int</span>     <span class="n">age</span> = 14;',
-          '<span class="t">int</span>     <span class="n">rating</span> = 15;',
-          '<span class="t">bool</span>    <span class="n">ticket</span> = false;',
-          '<span class="c">// alone only if old enough for the rating</span>',
-          '<span class="k">if</span> (<span class="n">age</span> &gt;= <span class="n">rating</span>)',
+          '<span class="t">char</span>    <span class="n">key</span> = <span class="s">\'Y\'</span>;',
+          '<span class="t">bool</span>    <span class="n">start</span> = false;',
+          '<span class="c">// start only if Y is pressed</span>',
+          '<span class="k">if</span> (<span class="n">key</span> == <span class="s">\'Y\'</span>)',
           '{',
-          '    <span class="n">ticket</span> = true;',
+          '    <span class="n">start</span> = true;',
           '}'
         ],
         questions: [
           {
-            text: "Will Maya get a ticket?",
+            text: "What does key store?",
             options: [
-              { label: "Yes", correct: false },
-              { label: "No — 14 &lt; 15", correct: true },
-              { label: "Yes — ticket starts true", correct: false }
+              { label: "A whole sentence", correct: false },
+              { label: "One character: Y", correct: true },
+              { label: "true or false", correct: false }
             ],
-            explain: "The if does not run, so ticket stays false."
+            explain: "char holds a single key character."
           },
           {
-            text: "Best type for ticket?",
+            text: "After this runs, what is start?",
             options: [
-              { label: "int", correct: false },
-              { label: "float", correct: false },
-              { label: "bool", correct: true }
-            ],
-            explain: "Allowed or not is true/false."
-          },
-          {
-            text: "If age becomes 15, what is ticket?",
-            options: [
-              { label: "true", correct: true },
               { label: "false", correct: false },
-              { label: "15", correct: false }
+              { label: "true", correct: true },
+              { label: "\'Y\'", correct: false }
             ],
-            explain: "15 ≥ 15, so ticket becomes true."
+            explain: "key equals 'Y', so start becomes true."
+          },
+          {
+            text: "If key was 'N', what is start?",
+            options: [
+              { label: "true", correct: false },
+              { label: "false", correct: true },
+              { label: "\'N\'", correct: false }
+            ],
+            explain: "'N' is not 'Y', so the if is skipped."
           }
         ]
       },
@@ -416,7 +411,7 @@
           {
             text: "Best type for ledOn?",
             options: [
-              { label: "int", correct: false },
+              { label: "char", correct: false },
               { label: "float", correct: false },
               { label: "bool", correct: true }
             ],
@@ -425,87 +420,44 @@
         ]
       },
       {
-        title: "Button",
-        scenario: "An Arduino reads a button on pin 2. Pressed means the LED should turn on.",
+        title: "Serial cmd",
+        scenario: "An Arduino reads one letter command from Serial: F = forward.",
         code: [
-          '<span class="t">int</span>     <span class="n">buttonPin</span> = 2;',
-          '<span class="t">bool</span>    <span class="n">pressed</span> = true;',
-          '<span class="t">bool</span>    <span class="n">ledOn</span> = false;',
-          '<span class="c">// if the button is pressed, turn LED on</span>',
-          '<span class="k">if</span> (<span class="n">pressed</span> == true)',
+          '<span class="t">char</span>    <span class="n">cmd</span> = <span class="s">\'F\'</span>;',
+          '<span class="t">bool</span>    <span class="n">moving</span> = false;',
+          '<span class="c">// F means drive forward</span>',
+          '<span class="k">if</span> (<span class="n">cmd</span> == <span class="s">\'F\'</span>)',
           '{',
-          '    <span class="n">ledOn</span> = true;',
+          '    <span class="n">moving</span> = true;',
           '}'
         ],
         questions: [
           {
-            text: "What is pressed?",
+            text: "Best type for a one-letter command?",
             options: [
-              { label: "An int pin number", correct: false },
-              { label: "A bool — button down or not", correct: true },
-              { label: "A float brightness", correct: false }
+              { label: "int", correct: false },
+              { label: "char", correct: true },
+              { label: "float", correct: false }
             ],
-            explain: "Pressed or not pressed fits bool."
+            explain: "One letter fits char."
           },
           {
-            text: "After this runs, what is ledOn?",
+            text: "Does the robot start moving?",
             options: [
-              { label: "false", correct: false },
-              { label: "true", correct: true },
-              { label: "2", correct: false }
+              { label: "No", correct: false },
+              { label: "Yes — cmd is 'F'", correct: true },
+              { label: "Only if cmd is a number", correct: false }
             ],
-            explain: "pressed is true, so the if sets ledOn to true."
+            explain: "The if matches 'F' and sets moving to true."
           },
           {
-            text: "What does == mean here?",
+            text: "If cmd becomes 'S' (stop), what is moving?",
             options: [
-              { label: "Store true into pressed", correct: false },
-              { label: "Check if pressed equals true", correct: true },
-              { label: "Turn the LED off", correct: false }
+              { label: "true", correct: false },
+              { label: "false", correct: true },
+              { label: "\'S\'", correct: false }
             ],
-            explain: "== compares. = assigns."
-          }
-        ]
-      },
-      {
-        title: "Battery",
-        scenario: "Alex’s phone warns if the battery is low.",
-        code: [
-          '<span class="t">float</span>   <span class="n">battery</span> = 12.5;',
-          '<span class="t">bool</span>    <span class="n">lowPower</span> = false;',
-          '<span class="c">// warn when battery is under 20%</span>',
-          '<span class="k">if</span> (<span class="n">battery</span> &lt; 20)',
-          '{',
-          '    <span class="n">lowPower</span> = true;',
-          '}'
-        ],
-        questions: [
-          {
-            text: "Why is battery a float?",
-            options: [
-              { label: "It can be a decimal like 12.5", correct: true },
-              { label: "Floats are always true", correct: false },
-              { label: "Phones only use floats", correct: false }
-            ],
-            explain: "Decimals need float."
-          },
-          {
-            text: "After the if, what is lowPower?",
-            options: [
-              { label: "false", correct: false },
-              { label: "true", correct: true },
-              { label: "12.5", correct: false }
-            ],
-            explain: "12.5 &lt; 20, so lowPower becomes true."
-          },
-          {
-            text: "If battery changes to 45.0?",
-            options: [
-              { label: "lowPower stays true forever", correct: false },
-              { label: "lowPower should be false", correct: true },
-              { label: "battery becomes a bool", correct: false }
-            ],
-            explain: "New values can lead to different decisions."
+            explain: "'S' is not 'F', so moving stays false."
           }
         ]
       },
@@ -553,46 +505,44 @@
         ]
       },
       {
-        title: "High score",
-        scenario: "Unlock a badge if your score beats the high score.",
+        title: "Traffic light",
+        scenario: "A model traffic light stores its colour as one letter: R, Y, or G.",
         code: [
-          '<span class="t">int</span>     <span class="n">score</span> = 820;',
-          '<span class="t">int</span>     <span class="n">highScore</span> = 750;',
-          '<span class="t">bool</span>    <span class="n">newRecord</span> = false;',
-          '<span class="c">// unlock badge for a new record</span>',
-          '<span class="k">if</span> (<span class="n">score</span> &gt; <span class="n">highScore</span>)',
+          '<span class="t">char</span>    <span class="n">light</span> = <span class="s">\'R\'</span>;',
+          '<span class="t">bool</span>    <span class="n">canGo</span> = false;',
+          '<span class="c">// cars may go only on green</span>',
+          '<span class="k">if</span> (<span class="n">light</span> == <span class="s">\'G\'</span>)',
           '{',
-          '    <span class="n">newRecord</span> = true;',
-          '    <span class="n">highScore</span> = <span class="n">score</span>;',
+          '    <span class="n">canGo</span> = true;',
           '}'
         ],
         questions: [
           {
-            text: "What does highScore = score do?",
+            text: "What is stored in light?",
             options: [
-              { label: "Compares the two numbers", correct: false },
-              { label: "Copies score into highScore", correct: true },
-              { label: "Deletes the old high score", correct: false }
+              { label: "The word red", correct: false },
+              { label: "The character R", correct: true },
+              { label: "true", correct: false }
             ],
-            explain: "Assignment updates highScore to 820."
+            explain: "char holds one letter at a time."
           },
           {
-            text: "Is newRecord true at the end?",
+            text: "With light = 'R', what is canGo?",
             options: [
-              { label: "Yes — 820 &gt; 750", correct: true },
-              { label: "No", correct: false },
-              { label: "Bools cannot change", correct: false }
+              { label: "true", correct: false },
+              { label: "false", correct: true },
+              { label: "\'R\'", correct: false }
             ],
-            explain: "The if condition is true."
+            explain: "'R' is not 'G', so cars must wait."
           },
           {
-            text: "Variables…",
+            text: "If light changes to 'G', what happens?",
             options: [
-              { label: "can change while the program runs", correct: true },
-              { label: "can never change", correct: false },
-              { label: "only ints can change", correct: false }
+              { label: "canGo becomes true", correct: true },
+              { label: "light becomes a bool", correct: false },
+              { label: "Nothing — char cannot change", correct: false }
             ],
-            explain: "That’s why they’re called variables."
+            explain: "Change the char, and the if can decide differently."
           }
         ]
       },
