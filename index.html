@@ -247,54 +247,11 @@
             explain: "Names are labels so we can store and reuse values."
           },
           {
-            text: "With age = 13 and height = 156.4, what is ridepass after the if?",
+            text: "What does = do?",
             options: [
-              { label: "false", correct: false },
-              { label: "true", correct: true },
-              { label: "156.4", correct: false }
-            ],
-            explain: "Both checks pass, so ridepass becomes true."
-          }
-        ]
-      },
-      {
-        title: "Drinking age",
-        scenario: "In the USA you must be 21 or older to buy alcohol. Mr Chan is 24.",
-        code: [
-          '<span class="t">int</span>     <span class="n">age</span> = 24;',
-          '<span class="t">int</span>     <span class="n">limit</span> = 21;',
-          '<span class="t">bool</span>    <span class="n">allowed</span> = false;',
-          '<span class="c">// Mr Chan wants to buy a drink in the US</span>',
-          '<span class="k">if</span> (<span class="n">age</span> &gt;= <span class="n">limit</span>)',
-          '{',
-          '    <span class="n">allowed</span> = true;',
-          '}'
-        ],
-        questions: [
-          {
-            text: "What type is age?",
-            options: [
-              { label: "float", correct: false },
-              { label: "int", correct: true },
-              { label: "bool", correct: false }
-            ],
-            explain: "Whole years are stored as an int."
-          },
-          {
-            text: "Is Mr Chan allowed to drink in the US?",
-            options: [
-              { label: "No", correct: false },
-              { label: "Yes — 24 ≥ 21", correct: true },
-              { label: "The code never checks", correct: false }
-            ],
-            explain: "allowed is set to true."
-          },
-          {
-            text: "What does = do in  allowed = true ?",
-            options: [
-              { label: "Checks if allowed equals true", correct: false },
-              { label: "Stores true inside allowed", correct: true },
-              { label: "Deletes the variable", correct: false }
+              { label: "Checks if two things are equal", correct: false },
+              { label: "Stores a value in a variable", correct: true },
+              { label: "Deletes a variable", correct: false }
             ],
             explain: "= means assignment — put this value into the variable."
           }
@@ -314,6 +271,15 @@
         ],
         questions: [
           {
+            text: "What type is age?",
+            options: [
+              { label: "float", correct: false },
+              { label: "int", correct: true },
+              { label: "bool", correct: false }
+            ],
+            explain: "Whole years are stored as an int."
+          },
+          {
             text: "After this runs, what is canVote?",
             options: [
               { label: "true", correct: false },
@@ -330,15 +296,49 @@
               { label: "if (age >= 18)", correct: false }
             ],
             explain: "bool means true or false."
+          }
+        ]
+      },
+      {
+        title: "Drinking age",
+        scenario: "In the USA you must be 21 or older to buy alcohol. Mr Chan is 24.",
+        code: [
+          '<span class="t">int</span>     <span class="n">age</span> = 24;',
+          '<span class="t">int</span>     <span class="n">limit</span> = 21;',
+          '<span class="t">bool</span>    <span class="n">allowed</span> = false;',
+          '<span class="c">// Mr Chan wants to buy a drink in the US</span>',
+          '<span class="k">if</span> (<span class="n">age</span> &gt;= <span class="n">limit</span>)',
+          '{',
+          '    <span class="n">allowed</span> = true;',
+          '}'
+        ],
+        questions: [
+          {
+            text: "How many int variables are created?",
+            options: [
+              { label: "1", correct: false },
+              { label: "2", correct: true },
+              { label: "3", correct: false }
+            ],
+            explain: "age and limit are ints. allowed is a bool."
           },
           {
-            text: "If age becomes 18, what happens?",
+            text: "Is Mr Chan allowed to drink in the US?",
             options: [
-              { label: "canVote becomes true", correct: true },
-              { label: "Nothing changes", correct: false },
-              { label: "age turns into a bool", correct: false }
+              { label: "No", correct: false },
+              { label: "Yes — 24 ≥ 21", correct: true },
+              { label: "The code never checks", correct: false }
             ],
-            explain: "Changing a variable can change what the if decides."
+            explain: "allowed is set to true."
+          },
+          {
+            text: "If age was 18, what would allowed be?",
+            options: [
+              { label: "true", correct: false },
+              { label: "false", correct: true },
+              { label: "21", correct: false }
+            ],
+            explain: "18 is not ≥ 21, so the if is skipped."
           }
         ]
       },
@@ -357,15 +357,6 @@
         ],
         questions: [
           {
-            text: "How many int variables are created?",
-            options: [
-              { label: "1", correct: false },
-              { label: "2", correct: true },
-              { label: "3", correct: false }
-            ],
-            explain: "age and rating are ints. ticket is a bool."
-          },
-          {
             text: "Will Maya get a ticket?",
             options: [
               { label: "Yes", correct: false },
@@ -382,6 +373,97 @@
               { label: "bool", correct: true }
             ],
             explain: "Allowed or not is true/false."
+          },
+          {
+            text: "If age becomes 15, what is ticket?",
+            options: [
+              { label: "true", correct: true },
+              { label: "false", correct: false },
+              { label: "15", correct: false }
+            ],
+            explain: "15 ≥ 15, so ticket becomes true."
+          }
+        ]
+      },
+      {
+        title: "LED",
+        scenario: "An Arduino turns an LED on pin 13 on or off.",
+        code: [
+          '<span class="t">int</span>     <span class="n">ledPin</span> = 13;',
+          '<span class="t">bool</span>    <span class="n">ledOn</span> = false;',
+          '<span class="c">// turn the LED on</span>',
+          '<span class="n">ledOn</span> = true;'
+        ],
+        questions: [
+          {
+            text: "What does ledPin store?",
+            options: [
+              { label: "Whether the LED is bright", correct: false },
+              { label: "Which pin the LED is plugged into", correct: true },
+              { label: "How many LEDs there are", correct: false }
+            ],
+            explain: "Pin numbers are whole numbers, stored as int."
+          },
+          {
+            text: "After this runs, what is ledOn?",
+            options: [
+              { label: "false", correct: false },
+              { label: "true", correct: true },
+              { label: "13", correct: false }
+            ],
+            explain: "ledOn starts false, then is set to true."
+          },
+          {
+            text: "Best type for ledOn?",
+            options: [
+              { label: "int", correct: false },
+              { label: "float", correct: false },
+              { label: "bool", correct: true }
+            ],
+            explain: "On or off is a true/false idea."
+          }
+        ]
+      },
+      {
+        title: "Button",
+        scenario: "An Arduino reads a button on pin 2. Pressed means the LED should turn on.",
+        code: [
+          '<span class="t">int</span>     <span class="n">buttonPin</span> = 2;',
+          '<span class="t">bool</span>    <span class="n">pressed</span> = true;',
+          '<span class="t">bool</span>    <span class="n">ledOn</span> = false;',
+          '<span class="c">// if the button is pressed, turn LED on</span>',
+          '<span class="k">if</span> (<span class="n">pressed</span> == true)',
+          '{',
+          '    <span class="n">ledOn</span> = true;',
+          '}'
+        ],
+        questions: [
+          {
+            text: "What is pressed?",
+            options: [
+              { label: "An int pin number", correct: false },
+              { label: "A bool — button down or not", correct: true },
+              { label: "A float brightness", correct: false }
+            ],
+            explain: "Pressed or not pressed fits bool."
+          },
+          {
+            text: "After this runs, what is ledOn?",
+            options: [
+              { label: "false", correct: false },
+              { label: "true", correct: true },
+              { label: "2", correct: false }
+            ],
+            explain: "pressed is true, so the if sets ledOn to true."
+          },
+          {
+            text: "What does == mean here?",
+            options: [
+              { label: "Store true into pressed", correct: false },
+              { label: "Check if pressed equals true", correct: true },
+              { label: "Turn the LED off", correct: false }
+            ],
+            explain: "== compares. = assigns."
           }
         ]
       },
@@ -428,6 +510,49 @@
         ]
       },
       {
+        title: "Temp sensor",
+        scenario: "An Arduino temperature sensor turns a fan on when it gets too hot.",
+        code: [
+          '<span class="t">float</span>   <span class="n">temp</span> = 31.5;',
+          '<span class="t">float</span>   <span class="n">limit</span> = 28.0;',
+          '<span class="t">bool</span>    <span class="n">fanOn</span> = false;',
+          '<span class="c">// turn fan on if too hot</span>',
+          '<span class="k">if</span> (<span class="n">temp</span> &gt; <span class="n">limit</span>)',
+          '{',
+          '    <span class="n">fanOn</span> = true;',
+          '}'
+        ],
+        questions: [
+          {
+            text: "Why are temp and limit floats?",
+            options: [
+              { label: "Temperatures often have decimals", correct: true },
+              { label: "Sensors cannot use int", correct: false },
+              { label: "Float means on or off", correct: false }
+            ],
+            explain: "31.5°C needs a float."
+          },
+          {
+            text: "Does the fan turn on?",
+            options: [
+              { label: "No — 31.5 is fine", correct: false },
+              { label: "Yes — 31.5 &gt; 28.0", correct: true },
+              { label: "No — fanOn starts false and never changes", correct: false }
+            ],
+            explain: "The if runs and sets fanOn to true."
+          },
+          {
+            text: "If temp becomes 22.0, what should fanOn be?",
+            options: [
+              { label: "true", correct: false },
+              { label: "false", correct: true },
+              { label: "22.0", correct: false }
+            ],
+            explain: "22.0 is not greater than 28.0."
+          }
+        ]
+      },
+      {
         title: "High score",
         scenario: "Unlock a badge if your score beats the high score.",
         code: [
@@ -468,6 +593,49 @@
               { label: "only ints can change", correct: false }
             ],
             explain: "That’s why they’re called variables."
+          }
+        ]
+      },
+      {
+        title: "Night light",
+        scenario: "An Arduino night light turns on only if it is dark and someone is nearby.",
+        code: [
+          '<span class="t">int</span>     <span class="n">light</span> = 80;',
+          '<span class="t">int</span>     <span class="n">distance</span> = 40;',
+          '<span class="t">bool</span>    <span class="n">lampOn</span> = false;',
+          '<span class="c">// dark = light under 100, nearby = under 50cm</span>',
+          '<span class="k">if</span> (<span class="n">light</span> &lt; 100 <span class="k">and</span> <span class="n">distance</span> &lt; 50)',
+          '{',
+          '    <span class="n">lampOn</span> = true;',
+          '}'
+        ],
+        questions: [
+          {
+            text: "What must be true for the lamp to turn on?",
+            options: [
+              { label: "Only dark", correct: false },
+              { label: "Dark AND nearby", correct: true },
+              { label: "Dark OR nearby", correct: false }
+            ],
+            explain: "and means both checks must pass."
+          },
+          {
+            text: "With these values, is lampOn true?",
+            options: [
+              { label: "Yes — both checks pass", correct: true },
+              { label: "No — it is not dark enough", correct: false },
+              { label: "No — they are too far", correct: false }
+            ],
+            explain: "80 &lt; 100 and 40 &lt; 50, so lampOn becomes true."
+          },
+          {
+            text: "If distance becomes 120, what is lampOn?",
+            options: [
+              { label: "true", correct: false },
+              { label: "false", correct: true },
+              { label: "120", correct: false }
+            ],
+            explain: "Nearby fails, so the whole and condition fails."
           }
         ]
       }
